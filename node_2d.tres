@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bgjdxbey4nut3"]
+
+[ext_resource type="Shader" path="res://node_2d.gdshader" id="1_kauhl"]
+
+[resource]
+shader = ExtResource("1_kauhl")
+shader_parameter/speed = 3.0
+shader_parameter/minStrength = 0.05
+shader_parameter/maxStrength = 0.01
+shader_parameter/strengthScale = 100.0
+shader_parameter/interval = 3.5
+shader_parameter/detail = 1.0
+shader_parameter/distortion = null
+shader_parameter/heightOffset = null
+shader_parameter/offset = 0.0

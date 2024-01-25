@@ -1,0 +1,172 @@
+[gd_scene load_steps=17 format=3 uid="uid://c54n6ok3l4qgy"]
+
+[ext_resource type="Material" uid="uid://bgjdxbey4nut3" path="res://node_2d.tres" id="1_k0gng"]
+[ext_resource type="Texture2D" uid="uid://bwadhm8f66cla" path="res://Stick Figure Character Sprites 2D/Extras/background1.png" id="1_o4jga"]
+[ext_resource type="Texture2D" uid="uid://d5a6mgi7ru43" path="res://Stick Figure Character Sprites 2D/Extras/background3.png" id="1_octt5"]
+[ext_resource type="Texture2D" uid="uid://wuiw452jxq1q" path="res://Stick Figure Character Sprites 2D/Extras/background2.png" id="2_qilnn"]
+[ext_resource type="Texture2D" uid="uid://bmpedkswifxmg" path="res://Stick Figure Character Sprites 2D/Extras/ground.png" id="4_pul6r"]
+[ext_resource type="Texture2D" uid="uid://fk6122o6qja3" path="res://Stick Figure Character Sprites 2D/Extras/grass_foreground.png" id="4_ygtlr"]
+[ext_resource type="Texture2D" uid="uid://mncfsp188kin" path="res://Stick Figure Character Sprites 2D/Extras/house4.png" id="5_x8utp"]
+[ext_resource type="Texture2D" uid="uid://cca53fekfdaad" path="res://Stick Figure Character Sprites 2D/Extras/house1.png" id="6_nxqyk"]
+[ext_resource type="Texture2D" uid="uid://by5a3b8hhj4d0" path="res://Stick Figure Character Sprites 2D/Extras/house2.png" id="6_wvwol"]
+[ext_resource type="Texture2D" uid="uid://o0l7xm3psqx3" path="res://Stick Figure Character Sprites 2D/Extras/tree1.png" id="7_denbw"]
+[ext_resource type="Texture2D" uid="uid://oxamu2juv7hf" path="res://Stick Figure Character Sprites 2D/Extras/rocks.png" id="7_gypkd"]
+[ext_resource type="Texture2D" uid="uid://ca44rmoytddo5" path="res://Stick Figure Character Sprites 2D/Extras/tree2.png" id="9_ua0t0"]
+[ext_resource type="PackedScene" uid="uid://dlmekjnc2d3oo" path="res://character_body_2d.tscn" id="12_j6smm"]
+
+[sub_resource type="Shader" id="Shader_7tgmf"]
+code = "// original wind shader from https://github.com/Maujoe/godot-simple-wind-shader-2d/tree/master/assets/maujoe.simple_wind_shader_2d
+// original script modified by HungryProton so that the assets are moving differently : https://pastebin.com/VL3AfV8D
+//
+// speed - The speed of the wind movement.
+// minStrength - The minimal strength of the wind movement.
+// maxStrength - The maximal strength of the wind movement.
+// strengthScale - Scalefactor for the wind strength.
+// interval - The time between minimal and maximal strength changes.
+// detail - The detail (number of waves) of the wind movement.
+// distortion - The strength of geometry distortion.
+// heightOffset - The height where the wind begins to move. By default 0.0.
+
+shader_type canvas_item;
+render_mode blend_mix;
+
+// Wind settings.
+uniform float speed = 1.0;
+uniform float minStrength : hint_range(0.0, 1.0) = 0.05;
+uniform float maxStrength : hint_range(0.0, 1.0) = 0.01;
+uniform float strengthScale = 100.0;
+uniform float interval = 3.5;
+uniform float detail = 1.0;
+uniform float distortion : hint_range(0.0, 1.0);
+uniform float heightOffset : hint_range(0.0, 1.0);
+
+// With the offset value, you can if you want different moves for each asset. Just put a random value (1, 2, 3) in the editor. Don't forget to mark the material as unique if you use this
+uniform float offset = 0; 
+
+
+float getWind(vec2 vertex, vec2 uv, float time){
+    float diff = pow(maxStrength - minStrength, 2.0);
+    float strength = clamp(minStrength + diff + sin(time / interval) * diff, minStrength, maxStrength) * strengthScale;
+    float wind = (sin(time) + cos(time * detail)) * strength * max(0.0, (1.0-uv.y) - heightOffset);
+    
+    return wind; 
+}
+
+void vertex() {
+    vec4 pos = MODEL_MATRIX * vec4(0.0, 0.0, 0.0, 1.0);
+    float time = TIME * speed + offset;
+    //float time = TIME * speed + pos.x * pos.y  ; not working when moving...
+    VERTEX.x += getWind(VERTEX.xy, UV, time);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_67mpk"]
+shader = SubResource("Shader_7tgmf")
+shader_parameter/speed = 1.3
+shader_parameter/minStrength = 0.05
+shader_parameter/maxStrength = 0.437
+shader_parameter/strengthScale = 102.445
+shader_parameter/interval = 4.495
+shader_parameter/detail = 2.0
+shader_parameter/distortion = 0.584
+shader_parameter/heightOffset = 0.483
+shader_parameter/offset = 5.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8oyby"]
+size = Vector2(1639, 79)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="World" type="Node2D" parent="."]
+position = Vector2(321, 337)
+scale = Vector2(0.8, 0.8)
+
+[node name="Background3" type="Sprite2D" parent="World"]
+position = Vector2(595.75, 151.5)
+scale = Vector2(68.8625, 30.775)
+texture = ExtResource("1_octt5")
+
+[node name="Background2" type="Sprite2D" parent="World"]
+position = Vector2(557, 128)
+texture = ExtResource("2_qilnn")
+
+[node name="Background1" type="Sprite2D" parent="World"]
+position = Vector2(498, 162)
+texture = ExtResource("1_o4jga")
+
+[node name="House1" type="Sprite2D" parent="World"]
+position = Vector2(-101.25, 242.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_nxqyk")
+
+[node name="House4" type="Sprite2D" parent="World"]
+position = Vector2(546.25, 307.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_x8utp")
+
+[node name="House2" type="Sprite2D" parent="World"]
+position = Vector2(1201.25, 326.25)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_wvwol")
+
+[node name="Tree1" type="Sprite2D" parent="World"]
+material = SubResource("ShaderMaterial_67mpk")
+position = Vector2(901.25, 280)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_denbw")
+
+[node name="GrassForeground" type="Sprite2D" parent="World"]
+material = ExtResource("1_k0gng")
+position = Vector2(-261.25, 435)
+texture = ExtResource("4_ygtlr")
+
+[node name="GrassForeground2" type="Sprite2D" parent="World"]
+material = ExtResource("1_k0gng")
+position = Vector2(345, 438.75)
+texture = ExtResource("4_ygtlr")
+
+[node name="GrassForeground3" type="Sprite2D" parent="World"]
+material = ExtResource("1_k0gng")
+position = Vector2(992.5, 446.25)
+texture = ExtResource("4_ygtlr")
+
+[node name="GrassForeground4" type="Sprite2D" parent="World"]
+material = ExtResource("1_k0gng")
+position = Vector2(1498.75, 457.5)
+texture = ExtResource("4_ygtlr")
+
+[node name="Tree2" type="Sprite2D" parent="World"]
+material = SubResource("ShaderMaterial_67mpk")
+position = Vector2(-53.75, 116.25)
+texture = ExtResource("9_ua0t0")
+
+[node name="Rocks" type="Sprite2D" parent="World"]
+position = Vector2(1078.75, 388.75)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_gypkd")
+
+[node name="Ground" type="Sprite2D" parent="World"]
+position = Vector2(-280, 480)
+texture = ExtResource("4_pul6r")
+
+[node name="Ground2" type="Sprite2D" parent="World"]
+position = Vector2(487.5, 480)
+texture = ExtResource("4_pul6r")
+
+[node name="Ground3" type="Sprite2D" parent="World"]
+position = Vector2(1255, 480)
+texture = ExtResource("4_pul6r")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(24, 120)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(685, 609.5)
+shape = SubResource("RectangleShape2D_8oyby")
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("12_j6smm")]
+position = Vector2(454, 666)
+is_action = true
+
+[node name="CharacterBody2D2" parent="." instance=ExtResource("12_j6smm")]
+position = Vector2(851, 668)
+collision_layer = 3
