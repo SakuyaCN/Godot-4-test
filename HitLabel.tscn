@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpj07n3wpladv"]
+
+[ext_resource type="FontFile" uid="uid://bs8k2rhcv3m8i" path="res://Lemon-Regular.ttf" id="1_acj7m"]
+[ext_resource type="Script" path="res://HitLabel.gd" id="1_ctbpd"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_023ph"]
+font = ExtResource("1_acj7m")
+font_size = 48
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.45098)
+
+[node name="HitLabel" type="Node2D"]
+script = ExtResource("1_ctbpd")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -53.0
+offset_top = -35.0
+offset_right = 57.0
+offset_bottom = 28.0
+text = "HIT!"
+label_settings = SubResource("LabelSettings_023ph")

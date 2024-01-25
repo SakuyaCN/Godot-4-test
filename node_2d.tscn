@@ -170,3 +170,5 @@ is_action = true
 [node name="CharacterBody2D2" parent="." instance=ExtResource("12_j6smm")]
 position = Vector2(851, 668)
 collision_layer = 3
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
