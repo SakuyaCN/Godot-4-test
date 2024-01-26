@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7f2qo8278gcw"
-path="res://.godot/imported/Impact_Hit_Lv1_spritesheet.png-fdcc8eadd9798a4e9ee0d1bc72618b77.ctex"
+uid="uid://dubs0aq6sa8ff"
+path="res://.godot/imported/Wind_Ground_Alpha_Left_0.5_Burst_A_spritesheet.png-393c86372b52558bad154591df25db33.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/Impact_Hit_Lv1_spritesheet.png"
-dest_files=["res://.godot/imported/Impact_Hit_Lv1_spritesheet.png-fdcc8eadd9798a4e9ee0d1bc72618b77.ctex"]
+source_file="res://asset/Wind_Ground_Alpha_Left_0.5_Burst_A_spritesheet.png"
+dest_files=["res://.godot/imported/Wind_Ground_Alpha_Left_0.5_Burst_A_spritesheet.png-393c86372b52558bad154591df25db33.ctex"]
 
 [params]
 

@@ -9,6 +9,7 @@ const _hit_label = preload("res://HitLabel.tscn")
 @onready var combo_timer = $ComboTimer
 @onready var effect_anim = $effect
 @onready var camera = $Camera2D
+@onready var stab = $AnimatedSprite2D2
 
 @onready var hit_box_1 = $HitBox1/CollisionShape2D
 @onready var hit_box_2 = $HitBox2/CollisionShape2D
@@ -71,7 +72,7 @@ func _physics_process(delta: float) -> void:
 	if !is_air_atk && !is_on_hit:
 		changeAnim()
 	
-	if is_on_hit && is_effect:
+	if is_on_hit && !is_effect:
 		position.x += 50 * delta
 		position.y -= 150 * delta
 	
@@ -94,9 +95,8 @@ func changeAnim():
 func on_hit():
 	is_on_hit = true
 	anim.play("hit")
-	if is_effect:
-		showLabel()
-		hitModulate()
+	showLabel()
+	hitModulate()
 #	if !audio.playing:
 
 func _on_combo_timer_timeout() -> void:
@@ -117,24 +117,26 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 
 func _on_hit_box_body_entered(body: Node2D) -> void:
 	body.on_hit()
-	if is_effect:
-		body.showEffect("hit%s" %(combo_count))
-		#camera._hit(Vector2(0.995,0.995),Vector2(6,-4))
-		camera.frameFreeze(0.1,0.08)
-		if combo_count == 3:
-			camera._hit(Vector2(1.02,1.02),Vector2(7,-9))
-		else:
-			camera._hit(Vector2(0.990,0.990),Vector2(3,-4))
-		if combo_count != 3:
-			audio.stream = load("res://audio/PUNCH_DESIGNED_HEAVY_86.wav")
-		else:
-			audio.stream = load("res://audio/PUNCH_SQUELCH_HEAVY_01.wav")
-		audio.play()
+	#if is_effect:
+	body.showEffect("hit%s" %(combo_count))
+	#camera._hit(Vector2(0.995,0.995),Vector2(6,-4))
+	if combo_count == 3:
+		camera._hit(Vector2(0.950,0.950),Vector2(7,-9))
+		camera.frameFreeze(0.1,0.09)
+	else:
+		camera._hit(Vector2(0.990,0.990),Vector2(3,-4))
+		camera.frameFreeze(0.1,0.06)
+	if combo_count != 3:
+		audio.stream = load("res://audio/PUNCH_DESIGNED_HEAVY_86.wav")
+	else:
+		audio.stream = load("res://audio/PUNCH_SQUELCH_HEAVY_01.wav")
+	audio.play()
 
 func showLabel():
 	var ins = _hit_label.instantiate()
 	ins.global_position = Vector2(global_position.x + randi_range(30,60),global_position.y - randi_range(100,150))
 	get_parent().add_child(ins)
+	get_parent().setCombo()
 
 func hitModulate():
 	var tweem = create_tween()
@@ -144,10 +146,16 @@ func _on_animated_sprite_2d_frame_changed() -> void:
 	if anim:
 		if anim.animation == 'atk_1' && anim.frame == 1:
 			setCollisionDisabled(hit_box_1)
+			if !stab.is_playing() && !is_effect:
+				stab.play("default")
 		if anim.animation == 'atk_2' && anim.frame == 1:
 			setCollisionDisabled(hit_box_2)
+			if !stab.is_playing() && !is_effect:
+				stab.play("default")
 		if anim.animation == 'atk_3' && anim.frame == 4:
 			setCollisionDisabled(hit_box_3)
+			if !stab.is_playing() && !is_effect:
+				stab.play("default")
 
 func setCollisionDisabled(hit_box):
 	hit_box.call_deferred('set_disabled',false)
